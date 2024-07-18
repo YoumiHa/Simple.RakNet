@@ -16,8 +16,8 @@ namespace Simple.RakNet.Packets
     public abstract partial class Packet
     {
         public ReadOnlyMemory<byte> Buffer { get; set; }
-        public required bool IsMcpe { get; set; }
-        public required int Id { get; set; }
+        public bool IsMcpe { get; set; }
+        public int Id { get; set; }
         protected private Stream? _buffer;
         private BinaryWriter? _writer;
         protected MemoryStreamReader? _reader;

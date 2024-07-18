@@ -8,6 +8,26 @@ using System.Threading.Tasks;
 
 namespace Simple.RakNet.Packets
 {
+    public enum RakNetProtocol 
+    {
+       UnconnectPing = 0x01,
+       UnconnectPong = 0x1c,
+       ConnectedPing = 0x00,
+       ConnectedPong = 0x03,
+       DetectLostConnections = 0x04,
+       OpenConnectionRequest1 = 0x05,
+       OpenConnectionReply1 = 0x06,
+       OpenConnectionRequest2 = 0x07,
+       OpenConnectionReply2 = 0x08,
+        ConnectionRequest = 0x09,
+        ConnectionRequestAccepted = 0x10,
+        NewIncomingConnection = 0x13,
+        NoFreeIncomingConnections = 0x14,
+        DisconnectionNotification = 0x15,
+        ConnectionBanned = 0x17,
+        IpRecentlyConnected = 0x1a,
+    }
+
     public partial class UnconnectPing : Packet
     {
         public long Time { get; set; }
@@ -234,68 +254,10 @@ namespace Simple.RakNet.Packets
         }
 
     }
-    public partial class UnconnectedPong : Packet
-    {
-
-        public long pingId; // = null;
-        public long serverId; // = null;
-        public readonly byte[] Magic;
-        public string serverName; // = null;
-
-        public UnconnectedPong()
-        {
-            Id = 0x1c;
-            IsMcpe = false;
-        }
-
-        protected override void EncodePacket()
-        {
-            base.EncodePacket();
-
-            BeforeEncode();
-
-            Write(pingId);
-            Write(serverId);
-            Write(Magic);
-            WriteFixedString(serverName);
-
-            AfterEncode();
-        }
-
-        partial void BeforeEncode();
-        partial void AfterEncode();
-
-        protected override void DecodePacket()
-        {
-            base.DecodePacket();
-
-            BeforeDecode();
-
-            pingId = ReadLong();
-            serverId = ReadLong();
-            ReadBytes(Magic.Length);
-            serverName = ReadFixedString();
-
-            AfterDecode();
-        }
-
-        partial void BeforeDecode();
-        partial void AfterDecode();
-
-        protected override void ResetPacket()
-        {
-            base.ResetPacket();
-
-            pingId = default(long);
-            serverId = default(long);
-            serverName = default(string);
-        }
-
-    }
     public partial class OpenConnectionRequest1 : Packet
     {
 
-        public readonly byte[] Magic;
+        public byte[] Magic;
         public byte raknetProtocolVersion; // = null;
 
         public OpenConnectionRequest1()
@@ -345,7 +307,7 @@ namespace Simple.RakNet.Packets
     public partial class OpenConnectionReply1 : Packet
     {
 
-        public readonly byte[] Magic;
+        public byte[] Magic;
 
         public long serverGuid; // = null;
         public byte serverHasSecurity; // = null;
@@ -404,7 +366,7 @@ namespace Simple.RakNet.Packets
     public partial class OpenConnectionRequest2 : Packet
     {
 
-        public readonly byte[] Magic;
+        public byte[] Magic;
 
         public IPEndPoint remoteBindingAddress; // = null;
         public short mtuSize; // = null;
@@ -463,7 +425,7 @@ namespace Simple.RakNet.Packets
     public partial class OpenConnectionReply2 : Packet
     {
 
-        public readonly byte[] Magic;
+        public byte[] Magic;
         public long serverGuid; // = null;
         public IPEndPoint clientEndpoint; // = null;
         public short mtuSize; // = null;
@@ -702,7 +664,7 @@ namespace Simple.RakNet.Packets
     public partial class NoFreeIncomingConnections : Packet
     {
 
-        public readonly byte[] Magic;
+        public byte[] Magic;
         public long serverGuid; // = null;
 
         public NoFreeIncomingConnections()
@@ -795,7 +757,7 @@ namespace Simple.RakNet.Packets
     public partial class ConnectionBanned : Packet
     {
 
-        public readonly byte[] Magic;
+        public byte[] Magic;
         public long serverGuid; // = null;
 
         public ConnectionBanned()
@@ -845,7 +807,7 @@ namespace Simple.RakNet.Packets
     public partial class IpRecentlyConnected : Packet
     {
 
-        public readonly byte[] Magic;
+        public byte[] Magic;
 
         public IpRecentlyConnected()
         {
@@ -874,6 +836,48 @@ namespace Simple.RakNet.Packets
             BeforeDecode();
 
             ReadBytes(Magic.Length);
+
+            AfterDecode();
+        }
+
+        partial void BeforeDecode();
+        partial void AfterDecode();
+
+        protected override void ResetPacket()
+        {
+            base.ResetPacket();
+
+        }
+
+    }
+    public partial class GamePacket : Packet
+    {
+
+        public GamePacket()
+        {
+            Id = 0xfe;
+            IsMcpe = false;
+        }
+
+        protected override void EncodePacket()
+        {
+            base.EncodePacket();
+
+            BeforeEncode();
+
+
+            AfterEncode();
+        }
+
+        partial void BeforeEncode();
+        partial void AfterEncode();
+
+        protected override void DecodePacket()
+        {
+            base.DecodePacket();
+
+            BeforeDecode();
+
 
             AfterDecode();
         }

@@ -16,7 +16,7 @@ namespace Simple.RakNet.Net
         public IPEndPoint m_IPEndPoint { get; private set; }
         private UdpClient m_Listener;
         public bool m_Connected { get; private set; } = false;
-        public required Action<EndPoint,ReadOnlyMemory<byte>> Recv_Action { get; set; }
+        public required Action<EndPoint, byte[]> Recv_Action { get; set; }
         public UdpClientCreater(IPEndPoint i_IPEndPoint)
         {
             this.m_IPEndPoint = i_IPEndPoint;
@@ -64,7 +64,11 @@ namespace Simple.RakNet.Net
                     if (!m_Connected)
                         return;
                     byte[] recv_bytes = m_Listener.Receive(ref iPEndPoint);
-                    Recv_Action(iPEndPoint,recv_bytes);
+                    Task.Run(() =>
+                    {
+                        Recv_Action(iPEndPoint, recv_bytes);
+                    });
+                   
                 }
             });
             thread.Start();
@@ -74,7 +78,7 @@ namespace Simple.RakNet.Net
             m_Connected = false;
             m_Listener.Dispose();
         }
-        public void Send(IPEndPoint i_ClientEndPoint, byte[] packet_data)
+        public void Send(EndPoint i_ClientEndPoint, byte[] packet_data)
         {
             m_Listener.Client.SendToAsync(packet_data,i_ClientEndPoint);
         }
