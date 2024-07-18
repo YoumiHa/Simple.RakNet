@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Simple.RakNet.Raknet
+namespace Simple.RakNet.Net
 {
-    internal class Packet
+    public class Session
     {
     }
 }
