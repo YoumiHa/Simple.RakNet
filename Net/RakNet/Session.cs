@@ -9,10 +9,13 @@ namespace Simple.RakNet.Net
 {
     public class Session
     {
+
         public IPEndPoint? Self_IPEndPoint { get; set; }
+        
         public Session(IPEndPoint endPoint)
         {
             Self_IPEndPoint = endPoint;
         }
+
     }
 }

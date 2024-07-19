@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
+using Simple.RakNet.Packets;
 namespace Simple.RakNet.Net.Packets
 {
     public class Manager
